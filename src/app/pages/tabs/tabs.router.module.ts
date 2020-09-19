@@ -17,11 +17,11 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'entities',
+        path: 'tasks',
         children: [
           {
             path: '',
-            loadChildren: '../entities/entities.module#EntitiesPageModule',
+            loadChildren: '../bpm/tasks/tasks.module#TasksPageModule',
           },
         ],
       },

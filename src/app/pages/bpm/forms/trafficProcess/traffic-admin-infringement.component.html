@@ -1,0 +1,38 @@
+<IonList>
+    <IonItem>
+        <IonLabel>Plate Number: {{ model.plateNumber }}</IonLabel>
+    </IonItem>
+    <IonItem>
+        <IonLabel>Infringement Type: {{ model.infringementType }}</IonLabel>
+    </IonItem>
+    <IonItem>
+        <IonLabel>Infringement Notes: {{ model.infringementNotes }} </IonLabel>
+    </IonItem>
+    <IonItem>
+        <IonLabel>Driver Notes: {{ model.driverNotes }}</IonLabel>
+    </IonItem>
+</IonList>
+<form #startNewProcess="ngForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+        <ion-item>
+            <ion-label position="floating">Admin Decision:</ion-label>
+            <IonSelect [(ngModel)]="model.trafficAdminSelects" name="trafficAdminSelects" placeholder="Admin Decision ">
+                <IonSelectOption *ngFor="let item of adminChoices" [value]="item.value">{{ item.value }}
+                </IonSelectOption>
+            </IonSelect>
+            <ion-input type="string" name="trafficAdminSelects" ngModel type="text"
+                [(ngModel)]="model.trafficAdminSelects" #trafficAdminSelects="ngModel"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Admin Notes</ion-label>
+            <IonTextarea name="adminNotes" ngModel type="text" [(ngModel)]="model.adminNotes" #adminNotes="ngModel">
+            </IonTextarea>
+        </ion-item>
+        <ion-row class="ion-padding">
+            <ion-col>
+                <ion-button type="submit" [disabled]="!startNewProcess.form.valid" expand="block" type="submit"
+                    color="primary" id="processForm">Submit</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-list>
+</form>
