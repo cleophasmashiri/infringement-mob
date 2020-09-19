@@ -1,5 +1,7 @@
 {
   "name": "infringement-mob",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
