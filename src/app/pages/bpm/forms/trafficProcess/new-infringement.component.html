@@ -1,13 +1,24 @@
 <form #startNewProcess="ngForm" (ngSubmit)="onSubmit()">
   <ion-list>
     <ion-item>
+      <button ion-button full (click)="scan('camera');">
+        <ion-icon name="qr-scanner"></ion-icon>
+        &nbsp; Take picture
+      </button>
+      <button ion-button full color="dark" (click)="scan('library');">
+        <ion-icon name="images"></ion-icon>
+        &nbsp; Select picture
+      </button>
+    </ion-item>
+    <ion-item>
       <ion-label position="floating">Plate Number</ion-label>
       <ion-input type="string" name="plateNumber" type="text" [(ngModel)]="model.plateNumber"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Infringement Type</ion-label>
       <ion-select [(ngModel)]="model.infringementType" name="infringementType" placeholder="Infringement Type">
-        <ion-select-option *ngFor="let item of infringmentTypes" [value]="item.value">{{ item.value }}</ion-select-option>
+        <ion-select-option *ngFor="let item of infringmentTypes" [value]="item.value">{{ item.value }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -23,3 +34,25 @@
     </ion-row>
   </ion-list>
 </form>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-list>
+      <ion-item>
+        <ion-label>Country</ion-label>
+
+        <!-- Field to select a country to check license plates for.-->
+        <ion-select
+          value="{{ getCountry() }}"
+          (ionChange)="setCountry($event.target.value)"
+        >
+          <ion-select-option
+            *ngFor="let country of countries"
+            [value]="country.value"
+            >{{ country.label }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-toolbar>
+</ion-footer>

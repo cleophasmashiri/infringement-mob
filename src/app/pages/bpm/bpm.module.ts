@@ -9,6 +9,7 @@ import { BpmPage } from './bpm.page';
 import { NewInfringementComponent } from './forms/trafficProcess/traffic-process.module';
 import { GenericFormComponent } from './generic-form/generic-form.component';
 import { StartProcessComponent } from './start-process/start-process.component';
+import { Camera } from "@ionic-native/camera/ngx";
 
 const routes: Routes = [
   {
@@ -26,5 +27,6 @@ const routes: Routes = [
 @NgModule({
   imports: [IonicModule, CommonModule, FormsModule, RouterModule.forChild(routes), TranslateModule],
   declarations: [BpmPage, StartProcessComponent, GenericFormComponent,NewInfringementComponent],
+  providers: [Camera],
 })
 export class BpmPageModule {}

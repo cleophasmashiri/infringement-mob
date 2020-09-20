@@ -5,13 +5,14 @@ import { TrafficAdminInfringementComponent } from './traffic-admin-infringement.
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { ResultModalModule } from 'src/app/pages/result/result.module';
 
 @NgModule({
   entryComponents: [NewInfringementComponent, TrafficAdminInfringementComponent],
   declarations: [NewInfringementComponent, TrafficAdminInfringementComponent],
-  imports: [IonicModule, FormsModule, CommonModule, RouterModule ],
+  imports: [IonicModule, FormsModule, CommonModule, RouterModule, ResultModalModule ],
   exports: [NewInfringementComponent
-    , TrafficAdminInfringementComponent],
+    , TrafficAdminInfringementComponent]
 })
 export class TrafficProcessModule {}
 

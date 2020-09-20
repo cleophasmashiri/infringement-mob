@@ -13,6 +13,8 @@ import { AppComponent } from './app.component';
 import { AuthExpiredInterceptor } from './interceptors/auth-expired.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OpenALPR } from '@ionic-native/openalpr/ngx';
+import { Camera } from "@ionic-native/camera/ngx";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -50,6 +52,8 @@ export function createTranslateLoader(http: HttpClient) {
       useClass: AuthExpiredInterceptor,
       multi: true,
     },
+    Camera,
+    OpenALPR
   ],
   bootstrap: [AppComponent],
 })
