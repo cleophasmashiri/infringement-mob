@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { CamundaRestService } from '../../camunda-rest.service';
 import { InfringementTypeSchema } from '../../schemas/infringement-type.schema';
 import { InfringementSchema } from '../../schemas/infringement.schema';
 import { StartProcessInstanceComponent } from '../general/start-process-instance.component';
 
 @Component({
-  selector: 'jhi-new-infringement',
+  selector: 'app-new-infringement',
   templateUrl: './new-infringement.component.html',
   styleUrls: ['./new-infringement.component.scss'],
 })
 export class NewInfringementComponent extends StartProcessInstanceComponent {
   submitted = false;
+  plateNumber = '';
   model = new InfringementSchema('', InfringementTypeSchema.Other, '', '', '', '', '', '');
   // private fileToUpload?: File;
   // private SUCCESS = false;
@@ -36,14 +38,12 @@ export class NewInfringementComponent extends StartProcessInstanceComponent {
   // onFileComplete(data: any): void {}
 
   onSubmit(): void {
-    this.route.params.subscribe(params => {
-      const processDefinitionKey = params.processdefinitionkey;
+    const processDefinitionKey = environment.processKey;;
       const variables = this.generateVariablesFromFormFields();
       this.camundaRestService.postProcessInstance(processDefinitionKey, variables).subscribe(() => {
-        this.routerNav.navigate(['staff/infringements/tasks']);
+        this.routerNav.navigate(['tabs/tasks']);
       });
-      this.submitted = true;
-    });
+      this.submitted = false;
   }
 
   generateVariablesFromFormFields(): any {

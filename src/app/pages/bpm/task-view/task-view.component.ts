@@ -3,7 +3,7 @@ import { CamundaRestService } from '../camunda-rest.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'jhi-task-view',
+  selector: 'app-task-view',
   templateUrl: './task-view.component.html',
   styleUrls: ['./task-view.component.scss'],
 })

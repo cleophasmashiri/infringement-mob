@@ -17,6 +17,15 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'infringements',
+        children: [
+          {
+            path: '',
+            loadChildren: '../bpm/bpm.module#BpmPageModule',
+          },
+        ],
+      },
+      {
         path: 'tasks',
         children: [
           {

@@ -2,7 +2,7 @@ import { Component, ViewChild, ViewContainerRef, Input, ComponentFactoryResolver
 import * as TrafficProcess from '../forms/trafficProcess/traffic-process.module';
 
 @Component({
-  selector: 'jhi-generic-form',
+  selector: 'app-generic-form',
   templateUrl: './generic-form.component.html',
   styleUrls: ['./generic-form.component.scss'],
 })
@@ -34,8 +34,10 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public addDynamicComponent(formKey: string): void {
+    console.log('formKey', formKey);
     const factory = this.factoryResolver.resolveComponentFactory(TrafficProcess[formKey + 'Component']);
     const component = factory.create(this.rootViewContainer.parentInjector);
+    console.log('component', component);
     this.rootViewContainer.insert(component.hostView);
   }
 }

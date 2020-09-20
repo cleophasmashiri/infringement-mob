@@ -13,8 +13,8 @@ const httpOptions = { headers: new HttpHeaders().set('Content-Type', 'applicatio
   providedIn: 'root',
 })
 export class CamundaRestService {
-
-  private engineRestUrl = `${environment.apiUrl}services/infringementapi/api/engine-rest/`;
+  
+  private engineRestUrl = `${environment.taskApiUrl}/services/infringementapi/api/engine-rest/`;
 
   constructor(private http: HttpClient) {}
 

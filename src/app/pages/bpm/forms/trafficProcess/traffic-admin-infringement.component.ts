@@ -6,7 +6,7 @@ import { InfringementSchema } from '../../schemas/infringement.schema';
 import { CompleteTaskComponent } from '../general/complete-task.component';
 
 @Component({
-  selector: 'jhi-traffic-admin-infringement',
+  selector: 'app-traffic-admin-infringement',
   templateUrl: './traffic-admin-infringement.component.html',
   styleUrls: [],
 })

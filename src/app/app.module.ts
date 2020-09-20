@@ -32,7 +32,7 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     IonicModule.forRoot(),
-    NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
+    NgxWebstorageModule.forRoot({ prefix: 'app', separator: '-' }),
     AppRoutingModule,
     BrowserAnimationsModule
   ],
