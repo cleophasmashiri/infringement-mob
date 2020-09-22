@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
@@ -6,7 +7,8 @@ import {
   OpenALPROptions,
   OpenALPRResult
 } from "@ionic-native/openalpr/ngx";
-import { Platform, ModalController } from "@ionic/angular";
+import { Platform, ModalController, ToastController } from "@ionic/angular";
+import { Observable } from 'rxjs';
 import { ResultModal } from 'src/app/pages/result/result.page';
 
 import { environment } from 'src/environments/environment';
@@ -23,6 +25,8 @@ import { StartProcessInstanceComponent } from '../general/start-process-instance
 export class NewInfringementComponent extends StartProcessInstanceComponent {
   submitted = false;
   plateNumber = '';
+  image: any;
+  imageData: any;
   model = new InfringementSchema('', InfringementTypeSchema.Other, '', '', '', '', '', '');
   // private fileToUpload?: File;
   // private SUCCESS = false;
@@ -37,15 +41,15 @@ export class NewInfringementComponent extends StartProcessInstanceComponent {
   ];
   route: ActivatedRoute;
   camundaRestService: CamundaRestService;
-   //Camera options.
-   protected cameraOptions: CameraOptions;
-   //OpenALPR options.
-   protected openAlprOptions: OpenALPROptions
+  //Camera options.
+  protected cameraOptions: CameraOptions;
+  //OpenALPR options.
+  protected openAlprOptions: OpenALPROptions
 
-
-  constructor(protected camera: Camera,
+  constructor(private http: HttpClient, protected camera: Camera,
     protected openalpr: OpenALPR,
     protected platform: Platform,
+    public toastController: ToastController,
     protected modalController: ModalController, route: ActivatedRoute, camundaRestService: CamundaRestService, private routerNav: Router) {
 
     super(route, camundaRestService);
@@ -67,20 +71,57 @@ export class NewInfringementComponent extends StartProcessInstanceComponent {
     };
   }
 
-   /**
-   * Scan an image for any licenseplates.
-   *
-   * @param input - determines whether to use the camera or the photolibrary.
-   */
+  upload(){
+    let url = 'https://example.com/upload.php';
+    const date = new Date().valueOf();
+  
+    // Replace extension according to your media type
+    const imageName = date+ '.jpeg';
+    // call method that creates a blob from dataUri
+    const imageBlob = this.dataURItoBlob(this.imageData);
+    const imageFile = new File([imageBlob], imageName, { type: 'image/jpeg' })
+  
+    let  postData = new FormData();
+    postData.append('file', imageFile);
+  
+    let data:Observable<any> = this.http.post(url,postData);
+    data.subscribe((result) => {
+      this.imageData = null;
+      this.image = null;
+      console.log(result);
+    });
+  }
+
+  // this function creates blob files from dataURLI:
+  dataURItoBlob(dataURI) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+     }
+    const blob = new Blob([int8Array], { type: 'image/jpeg' });    
+   return blob;
+  }
+  
+
+  /**
+  * Scan an image for any licenseplates.
+  *
+  * @param input - determines whether to use the camera or the photolibrary.
+  */
   scan(input: string) {
+    this.image = null;
+    this.imageData = null;
     this.cameraOptions.sourceType =
       input === "camera"
         ? this.camera.PictureSourceType.CAMERA
         : this.camera.PictureSourceType.PHOTOLIBRARY;
-
     this.camera
       .getPicture(this.cameraOptions)
       .then(imageData => {
+        // this.image = (<any>window).Ionic.WebView.convertFileSrc(imageData);
+        this.imageData = imageData;
         this.openalpr
           .scan(imageData, this.openAlprOptions)
           .then((result: [OpenALPRResult]) => {
@@ -95,55 +136,41 @@ export class NewInfringementComponent extends StartProcessInstanceComponent {
     }
   }
 
-    /**
-   * Get currently selected country.
-   */
-  getCountry(): string {
-    return this.openAlprOptions.country;
+  async showMessage(msg:string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 3000,
+      position: 'top',
+    });
   }
-
-  /**
-   * Function to get all countries options from the openalpr Country property.
-   */
-  getAllCountries(): string[] {
-    const countries = [];
-
-    for (let country in this.openalpr.Country) {
-      if (this.openalpr.Country.hasOwnProperty(country)) {
-        const countryValue = this.openalpr.Country[country];
-        countries.push({
-          value: countryValue,
-          label: countryValue.toUpperCase()
-        });
-      }
-    }
-
-    return countries;
-  }
-
   /**
    * Show the result using a modal.
    *
    * @param result
    */
   async showResult(result: OpenALPRResult[]) {
-    const modal = await this.modalController.create({
-      component: ResultModal,
-      componentProps: { result: result, country: this.getCountry() }
-    });
-
-    await modal.present();
+    if (result && result.length > 0) {
+      this.model.plateNumber = result[0].number;
+    } else {
+      const toast = await this.toastController.create({
+        message: 'Can not identify car plate number, please try again',
+        duration: 3000,
+        position: 'top',
+      });
+      toast.present();
+    }
   }
-
-  // onFileComplete(data: any): void {}
 
   onSubmit(): void {
     const processDefinitionKey = environment.processKey;;
-      const variables = this.generateVariablesFromFormFields();
-      this.camundaRestService.postProcessInstance(processDefinitionKey, variables).subscribe(() => {
-        this.routerNav.navigate(['tabs/tasks']);
-      });
-      this.submitted = false;
+    const variables = this.generateVariablesFromFormFields();
+    this.camundaRestService.postProcessInstance(processDefinitionKey, variables).subscribe(() => {
+      if (this.imageData) {
+        this.upload();
+      }
+      this.routerNav.navigate(['tabs/tasks']);
+    });
+    this.submitted = false;
   }
 
   generateVariablesFromFormFields(): any {
@@ -155,27 +182,7 @@ export class NewInfringementComponent extends StartProcessInstanceComponent {
         value: this.model[field],
       };
     });
-
     return variables;
   }
-  showTasks(): void {
-    this.submitted = false;
-  }
-  toBase64 = (file: Blob) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
 
-  handleFileInput(files: any): void {
-    // this.fileToUpload = files.item(0);
-    // this.uploadFileToActivity();
-  }
-  // TODO must resolve file upload
-  uploadFileToActivity(): void {
-    // this.toBase64(this.fileToUpload)
-    // .then((res: string) => this.model.image1 = res);
-  }
 }

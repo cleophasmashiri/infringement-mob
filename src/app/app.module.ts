@@ -15,13 +15,15 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OpenALPR } from '@ionic-native/openalpr/ngx';
 import { Camera } from "@ionic-native/camera/ngx";
+import { SpinnerInterceptor } from './shared/spinner-interceptor';
+import { SpinnerOverlayComponent } from './shared/spinner-overlay/spinner-overlay.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SpinnerOverlayComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -50,6 +52,11 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpinnerInterceptor,
       multi: true,
     },
     Camera,
