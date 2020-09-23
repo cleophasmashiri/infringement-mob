@@ -9,13 +9,14 @@
         <ion-icon name="images"></ion-icon>
         &nbsp; Select picture
       </button>
-       <div>
-        <img alt="No Image" *ngIf="image" [src]="image" >
-       </div>
+      <div>
+        <img alt="No Image" *ngIf="image" [src]="image">
+      </div>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Plate Number</ion-label>
-      <ion-input required type="string" name="plateNumber" type="text" [(ngModel)]="model.plateNumber" #plateNumber="ngModel"></ion-input>
+      <ion-input required type="string" name="plateNumber" type="text" [(ngModel)]="model.plateNumber"
+        #plateNumber="ngModel"></ion-input>
       <div class="error" *ngIf="plateNumber.hasError('required')">Plate Number Required</div>
     </ion-item>
     <ion-item>
@@ -32,9 +33,15 @@
     </ion-item>
     <ion-row class="ion-padding">
       <ion-col>
-        <ion-button (click)="onSubmit()" [disabled]="!startNewProcess.form.valid" expand="block" type="submit" color="primary"
-          id="login">Submit</ion-button>
+        <ion-button (click)="onSubmit()" [disabled]="!startNewProcess.form.valid" expand="block" type="submit"
+          color="primary" id="login">Submit</ion-button>
       </ion-col>
     </ion-row>
+    <div>Logs</div>
+    <ion-list>
+      <ion-item *ngFor="let log of logs">
+        <ion-label>{{ log }}</ion-label>
+      </ion-item>
+    </ion-list>
   </ion-list>
 </form>

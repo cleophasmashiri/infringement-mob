@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api',
-  taskApiUrl: 'http://localhost:8080',
-  processKey: 'trafficProcess'
+  apiUrl: 'https://infringementweb.herokuapp.com/api',
+  taskApiUrl: 'https://infringementweb.herokuapp.com',
+  processKey: 'trafficProcess',
+  versionNumber: '1.0.18'
 };
 
 /*

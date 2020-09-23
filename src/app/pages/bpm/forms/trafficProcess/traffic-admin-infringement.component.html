@@ -1,17 +1,17 @@
-<IonList>
-    <IonItem>
-        <IonLabel>Plate Number: {{ model.plateNumber }}</IonLabel>
-    </IonItem>
-    <IonItem>
-        <IonLabel>Infringement Type: {{ model.infringementType }}</IonLabel>
-    </IonItem>
-    <IonItem>
-        <IonLabel>Infringement Notes: {{ model.infringementNotes }} </IonLabel>
-    </IonItem>
-    <IonItem>
-        <IonLabel>Driver Notes: {{ model.driverNotes }}</IonLabel>
-    </IonItem>
-</IonList>
+<ion-list>
+    <ion-item>
+        <ion-label>Plate Number: {{ model.plateNumber }}</ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>Infringement Type: {{ model.infringementType }}</ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>Infringement Notes: {{ model.infringementNotes }} </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>Driver Notes: {{ model.driverNotes }}</ion-label>
+    </ion-item>
+</ion-list>
 <form #startNewProcess="ngForm" (ngSubmit)="onSubmit()">
     <ion-list>
         <ion-item>
